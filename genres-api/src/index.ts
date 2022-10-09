@@ -3,11 +3,14 @@ import express from "express";
 import mongoose from 'mongoose';
 import config from './config';
 import { api } from "./routes/api";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 // Connect mongodb
 (async () => {
-  if (config?.DATABASE_URL) await mongoose.connect(config.DATABASE_URL);
-  })();
+  await mongoose.connect(process.env.DATABASE_URL as any);
+})();
 
 const app = express();
 
