@@ -1,0 +1,29 @@
+version: "3"
+services:
+       genre-api:
+           container_name: genre-api
+           image: latest/genre-api
+           restart: always
+           build:
+              context: ./genres-api
+           ports:
+             - "5001:5001"
+           links:
+             - mongo
+       movie-api:
+           container_name: movie-api
+           image: latest/movie-api
+           restart: always
+           build:
+              context: ./movies-api
+           ports:
+             - "5002:5002"
+           links:
+             - mongo
+       mongo:
+             container_name: mongo
+             image: mongo
+             volumes:
+               - ./data:/data/db
+             ports:
+              - '27018:27017'
