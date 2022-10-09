@@ -11,30 +11,28 @@ export const createMovie = async (
   res.status(201).send(movie.toJSON());
 };
 
-export const getAllMovies = async (
-  req: Request,
-  res: Response
-) => {
+export const getAllMovies = async (req: Request, res: Response) => {
   const movies = await MovieModel.find().lean();
+  const genres: any[] = await Promise.all(
+    movies.map((movie) => getGenre(movie.genre))
+  );
 
-  const genres: any[] = await Promise.all(movies.map(movie => getGenre(movie.genre)));
-
-  return res.send(movies.map(m => ({
-    ...m,
-    genre: genres.find(g => g?._id == m.genre)
-  })));
+  return res.send(
+    movies.map((m) => ({
+      ...m,
+      genre: genres.find((g) => g?._id == m.genre),
+    }))
+  );
 };
 
-export const getMovie = async (
-  req: Request,
-  res: Response
-) => {
+export const getMovie = async (req: Request, res: Response) => {
   const movieId: string = req.params.movieId;
   const movie = await MovieModel.findById(movieId).exec();
   if (!movie) {
-    return res.status(404).send('Movie not Found!')
+    return res.status(404).send("Movie not Found!");
   }
-  return res.send(movie);
+  const genre = await getGenre(movie.genre);
+  return res.send({ ...movie.toJSON(), genre });
 };
 
 export const editMovie = async (
