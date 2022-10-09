@@ -4,7 +4,7 @@
   "description": "basic car api, using express js",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon -r dotenv/config --exec ts-node src/server.ts dotenv_config_path=.env --watch",
+    "start": "ts-node src/server.ts",
     "lint": "./node_modules/.bin/tslint -c tslint.json 'src/**/**.ts'",
     "test": "jest"
   },
